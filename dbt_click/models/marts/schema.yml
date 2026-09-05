@@ -1,0 +1,80 @@
+version: 2
+
+models:
+  - name: mart_earthquakes_daily
+    description: "Агрегация землетрясений по дням и регионам"
+    columns:
+      - name: load_date
+        tests:
+          - not_null
+      - name: region
+        tests:
+          - not_null
+      - name: earthquakes_count
+        tests:
+          - not_null
+      - name: avg_magnitude
+      - name: max_magnitude
+      - name: min_magnitude
+      - name: tsunami_count
+        tests:
+          - not_null
+      - name: avg_depth
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - load_date
+            - region
+
+  - name: mart_earthquakes_by_region
+    description: "Сводная статистика по регионам за всё время"
+    columns:
+      - name: region
+        tests:
+          - unique
+          - not_null
+      - name: total_earthquakes
+        tests:
+          - not_null
+      - name: avg_magnitude
+      - name: max_magnitude
+      - name: min_magnitude
+      - name: tsunami_events
+        tests:
+          - not_null
+      - name: avg_depth
+      - name: first_date
+      - name: last_date
+
+  - name: mart_strong_earthquakes
+    description: "Сильные землетрясения (magnitude >= 5.0)"
+    columns:
+      - name: id
+        tests:
+          - unique
+          - not_null
+      - name: ts
+        tests:
+          - not_null
+      - name: place
+      - name: region
+        tests:
+          - not_null
+      - name: magnitude
+        tests:
+          - not_null
+          - dbt_utils.accepted_range:
+             min_value: 5.0
+             inclusive: true
+      - name: felt
+      - name: tsunami
+        tests:
+          - accepted_values:
+              values: [0, 1]
+      - name: url
+      - name: longitude
+      - name: latitude
+      - name: depth
+      - name: load_date
+        tests:
+          - not_null

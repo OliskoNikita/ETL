@@ -1,5 +1,9 @@
 # ETL
 
+<p align="center">
+    <img src="png/main.png" alt="nf" width="1000"/>
+</p>
+
 Проект ETL (Extract, Transform, Load) для обработки и анализа данных с использованием современного стека технологий.
 
 ## Технологический стек
